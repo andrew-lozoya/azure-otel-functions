@@ -17,7 +17,7 @@ otel.diag.setLogger(
 
 module.exports = () => {
   const resources = new Resource({
-    [SemanticResourceAttributes.SERVICE_NAME]: 'OpenTelemetry-Node.JS-Example',
+    [SemanticResourceAttributes.SERVICE_NAME]: 'AzureFunction-Node-Otel',
     [SemanticResourceAttributes.SERVICE_INSTANCE_ID]: uuidv4()
   })
 
