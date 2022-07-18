@@ -9,7 +9,7 @@ from opentelemetry.sdk.trace.export import BatchSpanProcessor
 
 import azure.functions as func
 
-# Initialize tracing and an exporter that can send data to Honeycomb
+# Initialize tracing and an exporter that can send data to New Relic
 provider = TracerProvider()
 processor = BatchSpanProcessor(OTLPSpanExporter())
 provider.add_span_processor(
