@@ -27,7 +27,7 @@ module.exports = () => {
   })
 
   // Add NR OTLP endpoint and insert key
-  const url = "grpc://staging.otlp.nr-data.net:4317"
+  const url = "https://otlp.nr-data.net:4317"
   const metadata = new grpc.Metadata()
   // we're assuming that the correct insert key is set as a function environment variable.
   metadata.set("api-key", process.env.NEW_RELIC_INSERT_KEY)
