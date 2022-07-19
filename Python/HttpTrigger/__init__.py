@@ -18,7 +18,7 @@ import azure.functions as func
 http.client.HTTPConnection.debuglevel = 1
  
 
-# Initialize tracing and an exporter that can send data to Honeycomb
+# Initialize tracing and an exporter that can send data to New Relic
 provider = TracerProvider()
 processor = BatchSpanProcessor(OTLPSpanExporter())
 provider.add_span_processor(
