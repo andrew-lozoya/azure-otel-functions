@@ -3,15 +3,12 @@ import time
 import logging
 import requests
 from opentelemetry import trace
-from opentelemetry.instrumentation.requests import (
-    RequestsInstrumentor,
-)  # This library allows auto tracing HTTP requests made by the requests library.
+from opentelemetry.instrumentation.requests import RequestsInstrumentor # This library allows auto tracing HTTP requests made by the requests library.
 from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
 
 import azure.functions as func
-
 
 # Initialize tracing and an exporter that can send data to New Relic
 provider = TracerProvider()
@@ -27,7 +24,6 @@ tracer = trace.get_tracer(__name__)
 
 # Enable auto-instrumentation libraries
 RequestsInstrumentor().instrument()
-
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
     # You can still use the OpenTelemetry API as usual to create spans if you are not using opentelemetry auto-instrumentation librarys
@@ -54,7 +50,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
         if name:
             # Attach a new child and update the current span
-            with tracer.start_as_current_span("do_work"):
+            with tracer.start_as_current_span("doWork"):
                 time.sleep(0.1)
                 span = trace.get_current_span()
                 span.set_attribute("user", name)
@@ -65,7 +61,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
                     url=f'{os.environ["URL"]}',
                     json={"name": f"{name}"},
                 )
-            logging.info("---------------- TEST ----------------")
+
             # Close child span, set parent as current
             return func.HttpResponse(
                 f"Hello, {name}. This HTTP triggered function executed successfully."
