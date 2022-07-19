@@ -66,11 +66,11 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
                 span.set_attribute("username", name)
 
                 # Auto-instrumentation for requests usage
-                logging.info(requests.post(
+                requests.post(
                     # Get the setting named 'myAppSetting'
                     url=f'{os.environ["URL"]}',
                     json={"name": f"{name}"},
-                ))
+                )
 
             # Close child span, set parent as current
             return func.HttpResponse(
