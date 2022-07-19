@@ -63,7 +63,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             with tracer.start_as_current_span("do_work"):
                 time.sleep(0.1)
                 span = trace.get_current_span()
-                span.set_attribute("username", name)
+                span.set_attribute("user", name)
 
                 # Auto-instrumentation for requests usage
                 requests.post(
