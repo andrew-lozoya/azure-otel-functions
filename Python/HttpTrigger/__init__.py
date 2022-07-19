@@ -1,7 +1,6 @@
-import logging
 import os
-import http
 import time
+import logging
 import requests
 from opentelemetry import trace
 from opentelemetry.instrumentation.requests import (
@@ -13,10 +12,6 @@ from opentelemetry.sdk.trace.export import BatchSpanProcessor
 
 import azure.functions as func
 
-# Turn on global debugging for the HTTPConnection class, doing so will 
-# cause debug messages to be printed to STDOUT
-http.client.HTTPConnection.debuglevel = 1
- 
 
 # Initialize tracing and an exporter that can send data to New Relic
 provider = TracerProvider()
@@ -30,17 +25,16 @@ provider.add_span_processor(
 trace.set_tracer_provider(provider)
 tracer = trace.get_tracer(__name__)
 
-# Enable auto-instrumentation in the requests library
+# Enable auto-instrumentation libraries
 RequestsInstrumentor().instrument()
 
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
-
-    logging.info("Python HTTP trigger function processed a request.")
-
     # You can still use the OpenTelemetry API as usual to create spans if you are not using opentelemetry auto-instrumentation librarys
     # Start and activate a manual span indicating the HTTP request operation handling
     # in the server starts here
+    logging.info("Python HTTP trigger function processed a request.")
+
     with tracer.start_as_current_span(
         "http-handler",
         kind=trace.SpanKind.SERVER,
@@ -71,7 +65,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
                     url=f'{os.environ["URL"]}',
                     json={"name": f"{name}"},
                 )
-
+            logging.info("---------------- TEST ----------------")
             # Close child span, set parent as current
             return func.HttpResponse(
                 f"Hello, {name}. This HTTP triggered function executed successfully."
