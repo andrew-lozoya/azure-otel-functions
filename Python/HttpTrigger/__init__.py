@@ -35,25 +35,24 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         "http-handler",
         kind=trace.SpanKind.SERVER,
         attributes={"http.status_code": 200, "http.status_text": "OK"},
-    ):
+    ) as parent:
         name = req.params.get("name")
         if not name:
             try:
                 req_body = req.get_json()
             except ValueError as exc:
                 # Record the exception and update the span status.
-                span.record_exception(exc)
-                span.set_status(trace.Status(trace.StatusCode.ERROR, "error happened"))
+                parent.record_exception(exc)
+                parent.set_status(trace.Status(trace.StatusCode.ERROR, "error happened"))
                 pass
             else:
                 name = req_body.get("name")
 
         if name:
             # Attach a new child and update the current span
-            with tracer.start_as_current_span("doWork"):
+            with tracer.start_as_current_span("doWork") as child:
                 time.sleep(0.1)
-                span = trace.get_current_span()
-                span.set_attribute("user", name)
+                child.set_attribute("user", name)
 
                 # Auto-instrumentation for requests usage
                 requests.post(
@@ -67,7 +66,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
                 f"Hello, {name}. This HTTP triggered function executed successfully."
             )
         else:
-            span.set_status(trace.Status(trace.StatusCode.ERROR, "Please pass a name in the query string or in the request body"))
+            parent.set_status(trace.Status(trace.StatusCode.ERROR, "Please pass a name in the query string or in the request body"))
             return func.HttpResponse(
                 "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response.",
                 status_code=200,
