@@ -67,7 +67,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
                 f"Hello, {name}. This HTTP triggered function executed successfully."
             )
         else:
-            span.set_status(trace.Status(trace.StatusCode.ERROR, "Pleas pass a name in the query string or in the request body"))
+            span.set_status(trace.Status(trace.StatusCode.ERROR, "Please pass a name in the query string or in the request body"))
             return func.HttpResponse(
                 "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response.",
                 status_code=200,
