@@ -1,0 +1,1 @@
+# opentelemetry-azure-isolated-function
