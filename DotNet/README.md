@@ -1,1 +1,0 @@
-# opentelemetry-azure-function
